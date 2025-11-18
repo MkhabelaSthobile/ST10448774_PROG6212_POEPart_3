@@ -1,0 +1,253 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\controllers\\programmecoordinatorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:controllers\\programmecoordinatorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\controllers\\academicmanagercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:controllers\\academicmanagercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\models\\academicmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:models\\academicmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\models\\programmecoordinator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:models\\programmecoordinator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\models\\lecturer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:models\\lecturer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\models\\claim.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:models\\claim.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|c:\\users\\sithobile mkhabela\\onedrive\\desktop\\st10448774_prog6212_poepart_2\\cmcs_app\\views\\lecturer\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D69EBDF4-5960-4BA7-B48B-2E6B87854FFA}|CMCS_App.csproj|solutionrelative:views\\lecturer\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 151,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-07T23:37:03.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAawDEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:21:44.132Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProgrammeCoordinatorController.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\ProgrammeCoordinatorController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProgrammeCoordinatorController.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\ProgrammeCoordinatorController.cs",
+              "RelativeToolTip": "Controllers\\ProgrammeCoordinatorController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAC8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:34:44.666Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-22T20:18:45.327Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LecturerController.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\LecturerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LecturerController.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\LecturerController.cs",
+              "RelativeToolTip": "Controllers\\LecturerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:33:19.411Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:32:38.569Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:32:03.877Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AcademicManagerController.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\AcademicManagerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AcademicManagerController.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Controllers\\AcademicManagerController.cs",
+              "RelativeToolTip": "Controllers\\AcademicManagerController.cs",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAIwKoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:35:13.152Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:31:54.711Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProgrammeCoordinator.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\ProgrammeCoordinator.cs",
+              "RelativeDocumentMoniker": "Models\\ProgrammeCoordinator.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\ProgrammeCoordinator.cs",
+              "RelativeToolTip": "Models\\ProgrammeCoordinator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:31:04.262Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Lecturer.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\Lecturer.cs",
+              "RelativeDocumentMoniker": "Models\\Lecturer.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\Lecturer.cs",
+              "RelativeToolTip": "Models\\Lecturer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:29:50.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AcademicManager.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\AcademicManager.cs",
+              "RelativeDocumentMoniker": "Models\\AcademicManager.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\AcademicManager.cs",
+              "RelativeToolTip": "Models\\AcademicManager.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAIwDQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:29:42.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Claim.cs",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\Claim.cs",
+              "RelativeDocumentMoniker": "Models\\Claim.cs",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Models\\Claim.cs",
+              "RelativeToolTip": "Models\\Claim.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T20:22:45.449Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Views\\Lecturer\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Lecturer\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Sithobile Mkhabela\\OneDrive\\Desktop\\ST10448774_PROG6212_POEPart_2\\CMCS_App\\Views\\Lecturer\\Index.cshtml",
+              "RelativeToolTip": "Views\\Lecturer\\Index.cshtml",
+              "ViewState": "AgIAAGoAAAAAAAAAAADwvzYBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-22T20:16:09.74Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
