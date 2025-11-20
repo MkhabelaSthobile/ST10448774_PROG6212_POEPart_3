@@ -41,7 +41,19 @@ CREATE TABLE Claims (
     RejectionReason NVARCHAR(500) NULL,
 );
 
-
+-- NEW: Users table for authentication
+CREATE TABLE Users (
+    UserID			INT IDENTITY(1,1) PRIMARY KEY,
+    FullName		NVARCHAR(100) NOT NULL,
+    Email			NVARCHAR(100) NOT NULL UNIQUE,
+    Password		NVARCHAR(255) NOT NULL,
+    Role			NVARCHAR(50) NOT NULL, -- Lecturer, Coordinator, Manager, HR
+    LecturerID		INT NULL,
+    CoordinatorID	INT NULL,
+    ManagerID		INT NULL,
+    CreatedDate		DATETIME2 NOT NULL DEFAULT GETDATE(),
+    IsActive		BIT NOT NULL DEFAULT 1
+);
 
 --Inserting
 
@@ -73,10 +85,16 @@ VALUES	(1, 'January 2024', 40, 350.00, 14000.00, 'Approved by Manager', GETDATE(
 		(3, 'January 2024', 36, 380.00, 13680.00, 'Pending', GETDATE()-3),
 		(4, 'February 2024', 39, 340.00, 13260.00, 'Approved by Manager', GETDATE()-1);
 
+-- HR Admin Accounts
+INSERT INTO Users (FullName, Email, Password, Role, LecturerID, CoordinatorID, ManagerID)
+VALUES	('HR Admin 1', 'hr1@cmcs.ac.za', 'Hr@123!', 'HR', NULL, NULL, NULL),
+		('HR Admin 2', 'hr2@cmcs.ac.za', 'Hr@123!', 'HR', NULL, NULL, NULL);
+
 SELECT * FROM Lecturers
 SELECT * FROM ProgrammeCoordinators
 SELECT * FROM AcademicManagers
 SELECT * FROM Claims
+SELECT * FROM Users
 
 DROP TABLE Claims
 DROP TABLE Lecturers
