@@ -15,6 +15,10 @@ namespace CMCS_App.Models
         [Required]
         public string Email { get; set; } = string.Empty;
 
+        [Required]
+        [StringLength(255)]
+        public string Password { get; set; } = "Mgr@123!";
+
         public void VerifyClaim(Claim claim)
         {
             claim.UpdateStatus("Verified by Manager");

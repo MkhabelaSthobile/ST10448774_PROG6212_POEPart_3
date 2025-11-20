@@ -15,6 +15,10 @@ namespace CMCS_App.Models
         [Required]
         public string Email { get; set; } = string.Empty;
 
+        [Required]
+        [StringLength(255)]
+        public string Password { get; set; } = "Coord@123!";
+
         public void ApproveClaim(Claim claim)
         {
             claim.UpdateStatus("Approved by Coordinator");
