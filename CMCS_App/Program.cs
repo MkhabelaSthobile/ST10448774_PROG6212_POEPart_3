@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CMCS_App.Data;
 using CMCS_App.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CMCS_App
 {
@@ -21,6 +22,25 @@ namespace CMCS_App
             builder.Services.AddScoped<IClaimAutomationService, ClaimAutomationService>();
             builder.Services.AddScoped<IHRReportService, HRReportService>();
 
+            // Add Authentication
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/User/Login";
+                    options.LogoutPath = "/User/Logout";
+                    options.AccessDeniedPath = "/User/AccessDenied";
+                    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                    options.SlidingExpiration = true;
+                });
+
+            // Add Session
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(8);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             // Add logging
             builder.Services.AddLogging(logging =>
             {
@@ -29,22 +49,8 @@ namespace CMCS_App
                 logging.SetMinimumLevel(LogLevel.Information);
             });
 
-            // Add session support for better user experience
-            builder.Services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
-
-            // Add memory cache for performance
+            // Add memory cache
             builder.Services.AddMemoryCache();
-
-            // Add response compression for better performance
-            builder.Services.AddResponseCompression(options =>
-            {
-                options.EnableForHttps = true;
-            });
 
             var app = builder.Build();
 
@@ -65,14 +71,13 @@ namespace CMCS_App
             app.UseRouting();
 
             app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseResponseCompression();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=User}/{action=Login}/{id?}");
 
-            // Log application startup
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("CMCS Application started successfully at {Time}", DateTime.Now);
 

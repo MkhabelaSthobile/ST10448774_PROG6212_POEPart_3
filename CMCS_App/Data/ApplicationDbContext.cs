@@ -14,6 +14,7 @@ namespace CMCS_App.Data
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<ProgrammeCoordinator> ProgrammeCoordinators { get; set; }
         public DbSet<AcademicManager> AcademicManagers { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
