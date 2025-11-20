@@ -1,0 +1,404 @@
+﻿@model CMCS_App.Services.ClaimStatistics
+
+@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="text-primary">
+                <i class="fas fa-users-cog"></i> HR Management Dashboard
+            </h2>
+            <p class="text-muted">Manage lecturers, generate reports, and process payments</p>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Error!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Statistics Cards -->
+    @if (Model != null)
+    {
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">@Model.TotalClaims</h5>
+                                <p class="card-text mb-0">Total Claims</p>
+                            </div>
+                            <i class="fas fa-file-invoice fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">@Model.ApprovedByManager</h5>
+                                <p class="card-text mb-0">Ready for Payment</p>
+                            </div>
+                            <i class="fas fa-check-circle fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">@Model.SubmittedClaims</h5>
+                                <p class="card-text mb-0">Pending Review</p>
+                            </div>
+                            <i class="fas fa-clock fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">R @Model.TotalAmountApproved.ToString("N2")</h5>
+                                <p class="card-text mb-0">Total Approved</p>
+                            </div>
+                            <i class="fas fa-money-bill-wave fa-3x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Overview -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-chart-line"></i> Financial Overview
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Total Claimed Amount</h6>
+                                <h4 class="text-info">R @Model.TotalAmountClaimed.ToString("N2")</h4>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Pending Amount</h6>
+                                <h4 class="text-warning">R @Model.TotalAmountPending.ToString("N2")</h4>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Average Claim Amount</h6>
+                                <h4 class="text-secondary">R @Model.AverageClaimAmount.ToString("N2")</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Approval Rate</h6>
+                                <div class="progress" style="height: 25px;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         style="width: @Model.ApprovalRate%"
+                                         aria-valuenow="@Model.ApprovalRate" aria-valuemin="0" aria-valuemax="100">
+                                        @Model.ApprovalRate.ToString("F1")%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Rejection Rate</h6>
+                                <div class="progress" style="height: 25px;">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                         style="width: @Model.RejectionRate%"
+                                         aria-valuenow="@Model.RejectionRate" aria-valuemin="0" aria-valuemax="100">
+                                        @Model.RejectionRate.ToString("F1")%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-tasks"></i> Quick Actions
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a asp-action="ManageLecturers" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-users"></i><br>
+                                Manage Lecturers
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-action="ClaimsRequiringAttention" class="btn btn-warning btn-lg w-100">
+                                <i class="fas fa-exclamation-circle"></i><br>
+                                Claims Requiring Attention
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-success btn-lg w-100" data-bs-toggle="modal" data-bs-target="#reportModal">
+                                <i class="fas fa-file-alt"></i><br>
+                                Generate Reports
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-info btn-lg w-100" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                                <i class="fas fa-money-check-alt"></i><br>
+                                Process Payments
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-download"></i> Export & Reports
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-file-csv fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">Export Claims Data</h5>
+                                    <p class="card-text">Download all claims in CSV format</p>
+                                    <a asp-action="ExportToCSV" asp-route-reportType="claims" class="btn btn-success">
+                                        <i class="fas fa-download"></i> Download CSV
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-file-excel fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Export Lecturer Data</h5>
+                                    <p class="card-text">Download lecturer information</p>
+                                    <a asp-action="ExportToCSV" asp-route-reportType="lecturers" class="btn btn-primary">
+                                        <i class="fas fa-download"></i> Download CSV
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-bar fa-3x text-warning mb-3"></i>
+                                    <h5 class="card-title">Financial Report</h5>
+                                    <p class="card-text">Export financial summary data</p>
+                                    <a asp-action="ExportToCSV" asp-route-reportType="financial" class="btn btn-warning">
+                                        <i class="fas fa-download"></i> Download CSV
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Generation Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-file-alt"></i> Generate Reports
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <!-- Invoice Report -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-file-invoice"></i> Invoice Report</h5>
+                                <p class="card-text">Generate invoice for approved claims</p>
+                                <form asp-action="GenerateInvoiceReport" method="get" target="_blank">
+                                    <div class="mb-2">
+                                        <label class="form-label">Month (Optional)</label>
+                                        <select class="form-select" name="month">
+                                            <option value="">All Months</option>
+                                            <option value="January">January</option>
+                                            <option value="February">February</option>
+                                            <option value="March">March</option>
+                                            <option value="April">April</option>
+                                            <option value="May">May</option>
+                                            <option value="June">June</option>
+                                            <option value="July">July</option>
+                                            <option value="August">August</option>
+                                            <option value="September">September</option>
+                                            <option value="October">October</option>
+                                            <option value="November">November</option>
+                                            <option value="December">December</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Generate</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Summary -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-money-bill-wave"></i> Payment Summary</h5>
+                                <p class="card-text">Generate monthly payment summary</p>
+                                <form asp-action="GeneratePaymentSummary" method="get" target="_blank">
+                                    <div class="mb-2">
+                                        <label class="form-label">Month *</label>
+                                        <select class="form-select" name="month" required>
+                                            <option value="">Select Month</option>
+                                            <option value="January">January</option>
+                                            <option value="February">February</option>
+                                            <option value="March">March</option>
+                                            <option value="April">April</option>
+                                            <option value="May">May</option>
+                                            <option value="June">June</option>
+                                            <option value="July">July</option>
+                                            <option value="August">August</option>
+                                            <option value="September">September</option>
+                                            <option value="October">October</option>
+                                            <option value="November">November</option>
+                                            <option value="December">December</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100">Generate</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Financial Report -->
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-chart-line"></i> Monthly Financial Report</h5>
+                                <p class="card-text">View detailed financial breakdown for a specific month</p>
+                                <form asp-action="MonthlyFinancialReport" method="get">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <select class="form-select" name="month" required>
+                                                <option value="">Select Month</option>
+                                                <option value="January">January</option>
+                                                <option value="February">February</option>
+                                                <option value="March">March</option>
+                                                <option value="April">April</option>
+                                                <option value="May">May</option>
+                                                <option value="June">June</option>
+                                                <option value="July">July</option>
+                                                <option value="August">August</option>
+                                                <option value="September">September</option>
+                                                <option value="October">October</option>
+                                                <option value="November">November</option>
+                                                <option value="December">December</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="submit" class="btn btn-info w-100">View Report</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Processing Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-money-check-alt"></i> Process Batch Payment
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="ProcessBatchPayment" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> This will process all approved claims for the selected month.
+                    </div>
+                    <div class="mb-3">
+                        <label for="paymentMonth" class="form-label">Select Month *</label>
+                        <select class="form-select" id="paymentMonth" name="month" required>
+                            <option value="">Select Month</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success"
+                            onclick="return confirm('Are you sure you want to process batch payment for this month?')">
+                        <i class="fas fa-check"></i> Process Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

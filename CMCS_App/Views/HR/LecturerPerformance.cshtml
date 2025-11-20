@@ -1,0 +1,298 @@
+﻿@model CMCS_App.Services.LecturerPerformanceReport
+
+@{
+    ViewData["Title"] = "Lecturer Performance Report";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="text-primary">
+                <i class="fas fa-chart-line"></i> Lecturer Performance Report
+            </h2>
+            <p class="text-muted">Detailed performance analysis for @Model.LecturerName</p>
+            <div class="btn-group">
+                <a asp-action="ManageLecturers" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Lecturers
+                </a>
+                <button onclick="window.print()" class="btn btn-info">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lecturer Information -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-user"></i> Lecturer Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>Name:</strong></td>
+                            <td>@Model.LecturerName</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email:</strong></td>
+                            <td><a href="mailto:@Model.Email">@Model.Email</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Module:</strong></td>
+                            <td>@Model.ModuleName</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>Hourly Rate:</strong></td>
+                            <td>R @Model.HourlyRate.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Last Claim Date:</strong></td>
+                            <td>@(Model.LastClaimDate?.ToString("dd MMM yyyy") ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Report Generated:</strong></td>
+                            <td>@Model.GeneratedAt.ToString("dd MMM yyyy HH:mm")</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-info h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-invoice fa-3x mb-2"></i>
+                    <h3>@Model.TotalClaims</h3>
+                    <p class="mb-0">Total Claims</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-3x mb-2"></i>
+                    <h3>@Model.ApprovedClaims</h3>
+                    <p class="mb-0">Approved Claims</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-times-circle fa-3x mb-2"></i>
+                    <h3>@Model.RejectedClaims</h3>
+                    <p class="mb-0">Rejected Claims</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-3x mb-2"></i>
+                    <h3>@Model.PendingClaims</h3>
+                    <p class="mb-0">Pending Claims</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financial Summary -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-money-bill-wave"></i> Financial Summary</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text-center p-3 border rounded">
+                        <h6 class="text-muted">Total Hours Worked</h6>
+                        <h3 class="text-primary">@Model.TotalHoursWorked hrs</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3 border rounded">
+                        <h6 class="text-muted">Total Earnings</h6>
+                        <h3 class="text-success">R @Model.TotalEarnings.ToString("N2")</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3 border rounded">
+                        <h6 class="text-muted">Avg. Monthly Hours</h6>
+                        <h3 class="text-info">@Model.AverageMonthlyHours.ToString("F1") hrs</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3 border rounded">
+                        <h6 class="text-muted">Avg. Claim Amount</h6>
+                        <h3 class="text-warning">R @Model.AverageClaimAmount.ToString("N2")</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Performance Metrics</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h6 class="text-muted">Approval Rate</h6>
+                    <div class="progress" style="height: 30px;">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: @Model.ApprovalRate%"
+                             aria-valuenow="@Model.ApprovalRate" aria-valuemin="0" aria-valuemax="100">
+                            @Model.ApprovalRate.ToString("F1")%
+                        </div>
+                    </div>
+                    <small class="text-muted">@Model.ApprovedClaims out of @Model.TotalClaims claims approved</small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h6 class="text-muted">Rejection Rate</h6>
+                    <div class="progress" style="height: 30px;">
+                        <div class="progress-bar bg-danger" role="progressbar"
+                             style="width: @Model.RejectionRate%"
+                             aria-valuenow="@Model.RejectionRate" aria-valuemin="0" aria-valuemax="100">
+                            @Model.RejectionRate.ToString("F1")%
+                        </div>
+                    </div>
+                    <small class="text-muted">@Model.RejectedClaims out of @Model.TotalClaims claims rejected</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Claims by Month -->
+    @if (Model.ClaimsByMonth.Any())
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar"></i> Claims by Month</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Month</th>
+                                <th>Number of Claims</th>
+                                <th>Earnings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var month in Model.ClaimsByMonth.OrderBy(m => m.Key))
+                            {
+                                <tr>
+                                    <td><strong>@month.Key</strong></td>
+                                    <td>@month.Value claims</td>
+                                    <td>
+                                        @{
+                                            var earnings = Model.EarningsByMonth.ContainsKey(month.Key)
+                                            ? Model.EarningsByMonth[month.Key]
+                                            : 0m;
+                                        }
+                                        <strong class="text-success">R @earnings.ToString("N2")</strong>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <th>TOTAL</th>
+                                <th>@Model.ClaimsByMonth.Sum(m => m.Value) claims</th>
+                                <th><strong class="text-success">R @Model.TotalEarnings.ToString("N2")</strong></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Performance Analysis -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Performance Analysis</h5>
+        </div>
+        <div class="card-body">
+            <h6 class="text-primary">Key Insights:</h6>
+            <ul class="list-group list-group-flush">
+                @if (Model.ApprovalRate >= 90)
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <strong>Excellent approval rate</strong> - @Model.ApprovalRate.ToString("F1")% of claims approved
+                    </li>
+                }
+                else if (Model.ApprovalRate >= 75)
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-info-circle text-info"></i>
+                        <strong>Good approval rate</strong> - @Model.ApprovalRate.ToString("F1")% of claims approved
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                        <strong>Approval rate needs improvement</strong> - Only @Model.ApprovalRate.ToString("F1")% of claims approved
+                    </li>
+                }
+
+                @if (Model.AverageMonthlyHours > 160)
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-arrow-up text-info"></i>
+                        <strong>Above average workload</strong> - Averaging @Model.AverageMonthlyHours.ToString("F1") hours per month
+                    </li>
+                }
+                else if (Model.AverageMonthlyHours < 80)
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-arrow-down text-warning"></i>
+                        <strong>Below average workload</strong> - Averaging @Model.AverageMonthlyHours.ToString("F1") hours per month
+                    </li>
+                }
+
+                @if (Model.TotalEarnings > 50000)
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-star text-warning"></i>
+                        <strong>High earner</strong> - Total earnings: R @Model.TotalEarnings.ToString("N2")
+                    </li>
+                }
+
+                @if (Model.RejectedClaims == 0 && Model.TotalClaims > 5)
+                {
+                    <li class="list-group-item">
+                        <i class="fas fa-trophy text-success"></i>
+                        <strong>Perfect record</strong> - No rejected claims
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .btn, .btn-group, nav, footer {
+            display: none !important;
+        }
+
+        .card {
+            page-break-inside: avoid;
+        }
+    }
+</style>

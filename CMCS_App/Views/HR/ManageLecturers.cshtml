@@ -1,0 +1,234 @@
+﻿@model IEnumerable<CMCS_App.Models.Lecturer>
+
+@{
+    ViewData["Title"] = "Manage Lecturers";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="text-primary">
+                <i class="fas fa-users"></i> Manage Lecturers
+            </h2>
+            <p class="text-muted">Add, update, and manage lecturer information</p>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Add New Lecturer -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-user-plus"></i> Add New Lecturer</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddLecturer" method="post" id="addLecturerForm">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" class="form-control" name="fullName" required
+                                   placeholder="e.g., Dr. John Smith" maxlength="100" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-control" name="email" required
+                                   placeholder="john.smith@university.ac.za" maxlength="100" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">Module *</label>
+                            <input type="text" class="form-control" name="moduleName" required
+                                   placeholder="Computer Science" maxlength="100" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">Hourly Rate (R) *</label>
+                            <input type="number" class="form-control" name="hourlyRate" required
+                                   step="0.01" min="0.01" max="1000" placeholder="350.00" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-plus"></i> Add Lecturer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lecturers Table -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-list"></i> All Lecturers</span>
+            <span class="badge bg-light text-dark">@Model.Count() lecturers</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Module</th>
+                                <th>Hourly Rate</th>
+                                <th>Total Claims</th>
+                                <th>Total Earnings</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lecturer in Model)
+                            {
+                                <tr>
+                                    <td><strong>#@lecturer.LecturerID</strong></td>
+                                    <td>@lecturer.FullName</td>
+                                    <td>
+                                        <a href="mailto:@lecturer.Email">@lecturer.Email</a>
+                                    </td>
+                                    <td>@lecturer.ModuleName</td>
+                                    <td><strong>R @lecturer.HourlyRate.ToString("N2")</strong></td>
+                                    <td>
+                                        @{
+                                            var claimCount = ViewBag.LecturerClaims?.ContainsKey(lecturer.LecturerID) == true
+                                            ? ViewBag.LecturerClaims[lecturer.LecturerID]
+                                            : 0;
+                                        }
+                                        <span class="badge bg-info">@claimCount claims</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var earnings = ViewBag.LecturerEarnings?.ContainsKey(lecturer.LecturerID) == true
+                                            ? ViewBag.LecturerEarnings[lecturer.LecturerID]
+                                            : 0m;
+                                        }
+                                        <strong>R @earnings.ToString("N2")</strong>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-warning"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editModal@(lecturer.LecturerID)">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <a asp-action="LecturerPerformance" asp-route-lecturerId="@lecturer.LecturerID"
+                                               class="btn btn-sm btn-info">
+                                                <i class="fas fa-chart-line"></i> Performance
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id="editModal@(lecturer.LecturerID)" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-warning">
+                                                <h5 class="modal-title">
+                                                    <i class="fas fa-edit"></i> Edit Lecturer: @lecturer.FullName
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <form asp-action="UpdateLecturer" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="lecturerId" value="@lecturer.LecturerID" />
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Full Name *</label>
+                                                        <input type="text" class="form-control" name="fullName"
+                                                               value="@lecturer.FullName" required maxlength="100" />
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Email *</label>
+                                                        <input type="email" class="form-control" name="email"
+                                                               value="@lecturer.Email" required maxlength="100" />
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Module Name *</label>
+                                                        <input type="text" class="form-control" name="moduleName"
+                                                               value="@lecturer.ModuleName" required maxlength="100" />
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Hourly Rate (R) *</label>
+                                                        <input type="number" class="form-control" name="hourlyRate"
+                                                               value="@lecturer.HourlyRate" required
+                                                               step="0.01" min="0.01" max="1000" />
+                                                    </div>
+
+                                                    <div class="alert alert-info">
+                                                        <i class="fas fa-info-circle"></i>
+                                                        Changes will affect future claims only. Existing claims retain their original rates.
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-warning">
+                                                        <i class="fas fa-save"></i> Save Changes
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h5>No lecturers found</h5>
+                    <p>Add your first lecturer using the form above.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

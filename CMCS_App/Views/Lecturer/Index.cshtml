@@ -11,14 +11,14 @@
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["SuccessMessage"]
+            <i class="fas fa-check-circle"></i> <strong>Success!</strong> @TempData["SuccessMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["ErrorMessage"]
+            <i class="fas fa-exclamation-triangle"></i> <strong>Error!</strong> @TempData["ErrorMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -31,24 +31,39 @@
         <div class="card-body">
             <form asp-action="SubmitClaim" method="post" enctype="multipart/form-data" id="claimForm">
                 @Html.AntiForgeryToken()
+
+                <!-- Instructions Alert -->
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> <strong>Quick Guide:</strong>
+                    Fill in your module details, hours worked, and hourly rate. The total amount will be calculated automatically.
+                    Upload supporting documents if you have any (this is optional). Click "Submit Claim" when ready.
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="ModuleName" class="form-label">Module Name *</label>
+                            <label for="ModuleName" class="form-label">
+                                Module Name <span class="text-danger">*</span>
+                            </label>
                             <input type="text" class="form-control" id="ModuleName" name="ModuleName"
                                    required placeholder="e.g., Computer Science" maxlength="100" />
+                            <div class="form-text">Enter the name of the module you're teaching</div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="HourlyRate" class="form-label">Hourly Rate (R) *</label>
+                            <label for="HourlyRate" class="form-label">
+                                Hourly Rate (R) <span class="text-danger">*</span>
+                            </label>
                             <input type="number" class="form-control" id="HourlyRate" name="HourlyRate"
                                    step="0.01" min="0.01" max="1000" required
                                    placeholder="Enter hourly rate" />
-                            <small class="form-text text-muted">Rate must be between R0.01 and R1000</small>
+                            <small class="form-text text-muted">Rate must be between R0.01 and R1000.00</small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="Month" class="form-label">Month *</label>
+                            <label for="Month" class="form-label">
+                                Month <span class="text-danger">*</span>
+                            </label>
                             <select class="form-control" id="Month" name="Month" required>
                                 <option value="">Select Month</option>
                                 <option value="January">January</option>
@@ -64,41 +79,61 @@
                                 <option value="November">November</option>
                                 <option value="December">December</option>
                             </select>
+                            <div class="form-text">Select the month for this claim</div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="HoursWorked" class="form-label">Hours Worked *</label>
+                            <label for="HoursWorked" class="form-label">
+                                Hours Worked <span class="text-danger">*</span>
+                            </label>
                             <input type="number" class="form-control" id="HoursWorked" name="HoursWorked"
                                    min="1" max="200" required placeholder="Enter hours worked" />
                             <small class="form-text text-muted">Hours must be between 1 and 200</small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="TotalAmount" class="form-label">Total Amount (R)</label>
+                            <label for="TotalAmount" class="form-label">
+                                Total Amount (R) <span class="badge bg-secondary">Auto-calculated</span>
+                            </label>
                             <input type="text" class="form-control bg-light" id="TotalAmount" readonly
                                    placeholder="Will be calculated automatically" />
+                            <div class="form-text text-success" id="calculationInfo">
+                                <i class="fas fa-calculator"></i> Total = Hours Worked × Hourly Rate
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="SupportingDocument" class="form-label">Upload Supporting Document</label>
+                            <label for="SupportingDocument" class="form-label">
+                                Upload Supporting Document
+                                <span class="badge bg-info">Optional</span>
+                                <i class="fas fa-question-circle" data-bs-toggle="tooltip"
+                                   title="Upload timesheets, attendance records, or other supporting documents"></i>
+                            </label>
                             <input type="file" class="form-control" id="SupportingDocument" name="supportingDocument"
                                    accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" />
                             <div class="form-text">
                                 <strong>Accepted formats:</strong> PDF, DOCX, XLSX, JPG, PNG<br />
-                                <strong>Maximum size:</strong> 5MB
+                                <strong>Maximum size:</strong> 5MB<br />
+                                <strong>Note:</strong> Uploading a document is optional but recommended for verification
                             </div>
-                            <div id="fileInfo" class="mt-2 text-success"></div>
+                            <div id="fileInfo" class="mt-2"></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Validation Summary -->
+                <div id="validationSummary" class="alert alert-warning d-none" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Please check:</strong>
+                    <ul id="validationList" class="mb-0 mt-2"></ul>
+                </div>
+
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="reset" class="btn btn-secondary">
+                    <button type="reset" class="btn btn-secondary" id="clearBtn">
                         <i class="fas fa-times"></i> Clear Form
                     </button>
-                    <button type="submit" class="btn btn-success btn-lg">
+                    <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
                         <i class="fas fa-paper-plane"></i> Submit Claim
                     </button>
                 </div>
@@ -242,56 +277,178 @@
     </div>
 </div>
 
+<!-- Success Modal for Claim Submission -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle"></i> Claim Submitted Successfully!
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-3">
+                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    <h4 class="mt-3">Your claim has been submitted!</h4>
+                    <p class="text-muted">
+                        Claim ID: <strong id="modalClaimId"></strong><br>
+                        Total Amount: <strong id="modalTotalAmount"></strong><br>
+                        Status: <span class="badge bg-warning">Pending Review</span>
+                    </p>
+                    <p>You will be notified once the Programme Coordinator reviews your claim.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <i class="fas fa-check"></i> Got it!
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-        // Calculate total amount automatically
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('claimForm');
             const hoursInput = document.getElementById('HoursWorked');
             const rateInput = document.getElementById('HourlyRate');
             const totalInput = document.getElementById('TotalAmount');
             const fileInput = document.getElementById('SupportingDocument');
             const fileInfo = document.getElementById('fileInfo');
+            const submitBtn = document.getElementById('submitBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const validationSummary = document.getElementById('validationSummary');
+            const validationList = document.getElementById('validationList');
 
+            // Calculate total amount automatically
             function calculateTotal() {
                 const hours = parseFloat(hoursInput.value) || 0;
                 const rate = parseFloat(rateInput.value) || 0;
                 const total = hours * rate;
                 totalInput.value = 'R ' + total.toFixed(2);
+
+                // Update calculation info with animation
+                if (hours > 0 && rate > 0) {
+                    document.getElementById('calculationInfo').innerHTML =
+                        '<i class="fas fa-calculator"></i> ' + hours + ' hours × R' + rate.toFixed(2) + ' = <strong>R' + total.toFixed(2) + '</strong>';
+                }
             }
 
             hoursInput.addEventListener('input', calculateTotal);
             rateInput.addEventListener('input', calculateTotal);
 
-            // File upload feedback
+            // Real-time form validation
+            function validateForm() {
+                const errors = [];
+
+                const moduleName = document.getElementById('ModuleName').value.trim();
+                const hours = parseFloat(hoursInput.value);
+                const rate = parseFloat(rateInput.value);
+                const month = document.getElementById('Month').value;
+
+                if (!moduleName) {
+                    errors.push('Module name is required');
+                }
+                if (!month) {
+                    errors.push('Please select a month');
+                }
+                if (isNaN(hours) || hours < 1 || hours > 200) {
+                    errors.push('Hours must be between 1 and 200');
+                }
+                if (isNaN(rate) || rate < 0.01 || rate > 1000) {
+                    errors.push('Hourly rate must be between R0.01 and R1000');
+                }
+
+                if (errors.length > 0) {
+                    validationList.innerHTML = errors.map(e => '<li>' + e + '</li>').join('');
+                    validationSummary.classList.remove('d-none');
+                    return false;
+                } else {
+                    validationSummary.classList.add('d-none');
+                    return true;
+                }
+            }
+
+            // File upload feedback with enhanced visuals
             fileInput.addEventListener('change', function() {
                 if (this.files.length > 0) {
                     const file = this.files[0];
                     const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                         'image/jpeg', 'image/jpg', 'image/png'];
 
                     if (file.size > 5 * 1024 * 1024) {
-                        fileInfo.innerHTML = '<i class="fas fa-exclamation-triangle"></i> File size exceeds 5MB limit!';
-                        fileInfo.className = 'mt-2 text-danger';
+                        fileInfo.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> File size exceeds 5MB limit! Please choose a smaller file.</div>';
+                        this.value = '';
+                    } else if (!allowedTypes.includes(file.type)) {
+                        fileInfo.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Invalid file type! Please upload PDF, DOCX, XLSX, JPG, or PNG.</div>';
                         this.value = '';
                     } else {
-                        fileInfo.innerHTML = '<i class="fas fa-check-circle"></i> File selected: ' + file.name + ' (' + sizeMB + ' MB)';
-                        fileInfo.className = 'mt-2 text-success';
+                        fileInfo.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> File selected: <strong>' + file.name + '</strong> (' + sizeMB + ' MB)</div>';
                     }
                 } else {
                     fileInfo.innerHTML = '';
                 }
             });
 
+            // Form submission with validation
+            form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return false;
+                }
+
+                // Show loading state
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+                submitBtn.disabled = true;
+            });
+
+            // Clear form with confirmation
+            clearBtn.addEventListener('click', function(e) {
+                if (form.querySelector('input[type="text"]').value !== '' ||
+                    form.querySelector('input[type="number"]').value !== '') {
+                    if (!confirm('Are you sure you want to clear all form fields?')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+                fileInfo.innerHTML = '';
+                validationSummary.classList.add('d-none');
+                totalInput.value = '';
+            });
+
             // Initialize calculation on page load
             calculateTotal();
 
-            // Auto-dismiss alerts after 5 seconds
+            // Auto-dismiss alerts after 8 seconds
             setTimeout(function() {
-                const alerts = document.querySelectorAll('.alert');
+                const alerts = document.querySelectorAll('.alert-dismissible');
                 alerts.forEach(function(alert) {
                     const bsAlert = new bootstrap.Alert(alert);
                     bsAlert.close();
                 });
-            }, 5000);
+            }, 8000);
+
+            // Show success modal if claim was just submitted (check for success message)
+            @if (TempData["SuccessMessage"] != null && TempData["SuccessMessage"].ToString().Contains("submitted"))
+            {
+                    <text>
+                    setTimeout(function() {
+                        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        successModal.show();
+                    }, 500);
+                    </text>
+            }
         });
     </script>
 }
