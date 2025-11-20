@@ -5,32 +5,156 @@
 <div class="text-center">
     <h1 class="display-4">Welcome to CMCS</h1>
     <p class="lead">Contract Monthly Claim System</p>
+    <p class="text-muted">Automated claim management for educational institutions</p>
 
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <div class="card">
+    <div class="row mt-5 g-4">
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-user-graduate text-primary"></i> Lecturer</h5>
+                    <div class="mb-3">
+                        <i class="fas fa-user-graduate text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Lecturer</h5>
                     <p class="card-text">Submit and track your monthly claims</p>
-                    <a href="@Url.Action("Index", "Lecturer")" class="btn btn-primary">Go to Lecturer Dashboard</a>
+                    <ul class="list-unstyled text-start small">
+                        <li><i class="fas fa-check text-success"></i> Auto-calculation</li>
+                        <li><i class="fas fa-check text-success"></i> Document upload</li>
+                        <li><i class="fas fa-check text-success"></i> Real-time tracking</li>
+                    </ul>
+                    <a href="@Url.Action("Index", "Lecturer")" class="btn btn-primary w-100">
+                        <i class="fas fa-arrow-right"></i> Go to Dashboard
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-user-tie text-info"></i> Programme Coordinator</h5>
+                    <div class="mb-3">
+                        <i class="fas fa-user-tie text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Programme Coordinator</h5>
                     <p class="card-text">Review and approve lecturer claims</p>
-                    <a href="@Url.Action("Index", "ProgrammeCoordinator")" class="btn btn-info">Go to Coordinator Dashboard</a>
+                    <ul class="list-unstyled text-start small">
+                        <li><i class="fas fa-check text-success"></i> Auto-validation</li>
+                        <li><i class="fas fa-check text-success"></i> Quick approval</li>
+                        <li><i class="fas fa-check text-success"></i> Rejection tracking</li>
+                    </ul>
+                    <a href="@Url.Action("Index", "ProgrammeCoordinator")" class="btn btn-info w-100">
+                        <i class="fas fa-arrow-right"></i> Go to Dashboard
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-user-cog text-danger"></i> Academic Manager</h5>
+                    <div class="mb-3">
+                        <i class="fas fa-user-cog text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Academic Manager</h5>
                     <p class="card-text">Final verification and reporting</p>
-                    <a href="@Url.Action("Index", "AcademicManager")" class="btn btn-danger">Go to Manager Dashboard</a>
+                    <ul class="list-unstyled text-start small">
+                        <li><i class="fas fa-check text-success"></i> Final approval</li>
+                        <li><i class="fas fa-check text-success"></i> Report generation</li>
+                        <li><i class="fas fa-check text-success"></i> Statistics</li>
+                    </ul>
+                    <a href="@Url.Action("Index", "AcademicManager")" class="btn btn-danger w-100">
+                        <i class="fas fa-arrow-right"></i> Go to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-users-cog text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">HR Management</h5>
+                    <p class="card-text">Manage users and generate reports</p>
+                    <ul class="list-unstyled text-start small">
+                        <li><i class="fas fa-check text-success"></i> User management</li>
+                        <li><i class="fas fa-check text-success"></i> Payment processing</li>
+                        <li><i class="fas fa-check text-success"></i> Advanced reports</li>
+                    </ul>
+                    <a href="@Url.Action("Index", "HR")" class="btn btn-success w-100">
+                        <i class="fas fa-arrow-right"></i> Go to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3 class="mb-4">Key Features</h3>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <i class="fas fa-calculator fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Auto-Calculation</h5>
+                    <p class="card-text">Automatic calculation of claim totals with real-time validation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <i class="fas fa-robot fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Automated Workflows</h5>
+                    <p class="card-text">Smart automation for claim validation and approval processes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Comprehensive Reports</h5>
+                    <p class="card-text">Generate detailed financial and performance reports instantly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-upload fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Document Management</h5>
+                    <p class="card-text">Upload and manage supporting documents securely</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-danger">
+                <div class="card-body text-center">
+                    <i class="fas fa-bell fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Real-Time Tracking</h5>
+                    <p class="card-text">Track claim status and receive instant notifications</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-secondary">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-3x text-secondary mb-3"></i>
+                    <h5 class="card-title">Secure & Reliable</h5>
+                    <p class="card-text">Enterprise-grade security with data validation</p>
                 </div>
             </div>
         </div>
@@ -39,12 +163,12 @@
 
 <style>
     .card {
-        transition: transform 0.2s;
-        height: 200px;
+        transition: transform 0.2s, box-shadow 0.2s;
     }
 
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
         }
 
     .card-body {

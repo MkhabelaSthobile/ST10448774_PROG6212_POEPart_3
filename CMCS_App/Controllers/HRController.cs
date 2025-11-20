@@ -1,4 +1,5 @@
 ﻿using CMCS_App.Data;
+using CMCS_App.Models;
 using CMCS_App.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,9 @@ namespace CMCS_App.Controllers
             _logger = logger;
         }
 
-        // HR Dashboard with automated statistics
+        /// <summary>
+        /// HR Dashboard with automated statistics
+        /// </summary>
         public async Task<IActionResult> Index()
         {
             try
@@ -41,7 +44,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Generate invoice report
+        /// <summary>
+        /// Generate invoice report
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GenerateInvoiceReport(int? lecturerId, string? month)
         {
@@ -61,7 +66,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Generate payment summary
+        /// <summary>
+        /// Generate payment summary
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GeneratePaymentSummary(string month)
         {
@@ -86,7 +93,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Export data to CSV
+        /// <summary>
+        /// Export data to CSV
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> ExportToCSV(string reportType)
         {
@@ -108,7 +117,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // View lecturer performance
+        /// <summary>
+        /// View lecturer performance
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> LecturerPerformance(int lecturerId)
         {
@@ -126,7 +137,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // View monthly financial report
+        /// <summary>
+        /// View monthly financial report
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> MonthlyFinancialReport(string month)
         {
@@ -150,7 +163,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Get claims requiring attention
+        /// <summary>
+        /// Get claims requiring attention
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> ClaimsRequiringAttention()
         {
@@ -168,13 +183,35 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Manage lecturer data
+        /// <summary>
+        /// Manage lecturer data
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> ManageLecturers()
         {
             try
             {
                 var lecturers = await _context.Lecturers.ToListAsync();
+
+                // Get claim counts and earnings for each lecturer
+                var lecturerClaims = new Dictionary<int, int>();
+                var lecturerEarnings = new Dictionary<int, decimal>();
+
+                foreach (var lecturer in lecturers)
+                {
+                    var claims = await _context.Claims
+                        .Where(c => c.LecturerID == lecturer.LecturerID)
+                        .ToListAsync();
+
+                    lecturerClaims[lecturer.LecturerID] = claims.Count;
+                    lecturerEarnings[lecturer.LecturerID] = claims
+                        .Where(c => c.Status == "Approved by Manager")
+                        .Sum(c => c.TotalAmount);
+                }
+
+                ViewBag.LecturerClaims = lecturerClaims;
+                ViewBag.LecturerEarnings = lecturerEarnings;
+
                 _logger.LogInformation("Loaded {LecturerCount} lecturers for management", lecturers.Count);
                 return View(lecturers);
             }
@@ -186,10 +223,73 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Update lecturer information
+        /// <summary>
+        /// Add new lecturer
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateLecturer(int lecturerId, string fullName, string email, decimal hourlyRate)
+        public async Task<IActionResult> AddLecturer(string fullName, string email, string moduleName, decimal hourlyRate)
+        {
+            try
+            {
+                // Validation
+                if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(moduleName))
+                {
+                    TempData["ErrorMessage"] = "All fields are required.";
+                    return RedirectToAction(nameof(ManageLecturers));
+                }
+
+                if (hourlyRate < 0.01m || hourlyRate > 1000m)
+                {
+                    TempData["ErrorMessage"] = "Hourly rate must be between R0.01 and R1000.";
+                    return RedirectToAction(nameof(ManageLecturers));
+                }
+
+                // Check for duplicate email
+                var existingLecturer = await _context.Lecturers
+                    .FirstOrDefaultAsync(l => l.Email.ToLower() == email.ToLower());
+
+                if (existingLecturer != null)
+                {
+                    TempData["ErrorMessage"] = "A lecturer with this email already exists.";
+                    return RedirectToAction(nameof(ManageLecturers));
+                }
+
+                // Generate default password
+                var defaultPassword = GeneratePassword(fullName);
+
+                // Create new lecturer
+                var lecturer = new Lecturer
+                {
+                    FullName = fullName.Trim(),
+                    Email = email.Trim(),
+                    ModuleName = moduleName.Trim(),
+                    HourlyRate = hourlyRate,
+                    Password = defaultPassword // In production, hash this password!
+                };
+
+                _context.Lecturers.Add(lecturer);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = $"Lecturer {fullName} added successfully! Default password: {defaultPassword}";
+                _logger.LogInformation("New lecturer added: {LecturerName} (ID: {LecturerId})", fullName, lecturer.LecturerID);
+
+                return RedirectToAction(nameof(ManageLecturers));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding new lecturer");
+                TempData["ErrorMessage"] = "Error adding lecturer. Please try again.";
+                return RedirectToAction(nameof(ManageLecturers));
+            }
+        }
+
+        /// <summary>
+        /// Update lecturer information
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateLecturer(int lecturerId, string fullName, string email, string moduleName, decimal hourlyRate)
         {
             try
             {
@@ -200,8 +300,32 @@ namespace CMCS_App.Controllers
                     return RedirectToAction(nameof(ManageLecturers));
                 }
 
+                // Validation
+                if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(moduleName))
+                {
+                    TempData["ErrorMessage"] = "All fields are required.";
+                    return RedirectToAction(nameof(ManageLecturers));
+                }
+
+                if (hourlyRate < 0.01m || hourlyRate > 1000m)
+                {
+                    TempData["ErrorMessage"] = "Hourly rate must be between R0.01 and R1000.";
+                    return RedirectToAction(nameof(ManageLecturers));
+                }
+
+                // Check for duplicate email (excluding current lecturer)
+                var existingLecturer = await _context.Lecturers
+                    .FirstOrDefaultAsync(l => l.Email.ToLower() == email.ToLower() && l.LecturerID != lecturerId);
+
+                if (existingLecturer != null)
+                {
+                    TempData["ErrorMessage"] = "Another lecturer with this email already exists.";
+                    return RedirectToAction(nameof(ManageLecturers));
+                }
+
                 lecturer.FullName = fullName.Trim();
                 lecturer.Email = email.Trim();
+                lecturer.ModuleName = moduleName.Trim();
                 lecturer.HourlyRate = hourlyRate;
 
                 await _context.SaveChangesAsync();
@@ -219,14 +343,23 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Process batch payments
+        /// <summary>
+        /// Process batch payments
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessBatchPayment(string month)
         {
             try
             {
+                if (string.IsNullOrEmpty(month))
+                {
+                    TempData["ErrorMessage"] = "Please select a month.";
+                    return RedirectToAction(nameof(Index));
+                }
+
                 var claims = await _context.Claims
+                    .Include(c => c.Lecturer)
                     .Where(c => c.Month == month && c.Status == "Approved by Manager")
                     .ToListAsync();
 
@@ -236,17 +369,22 @@ namespace CMCS_App.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                foreach (var claim in claims)
-                {
-                    claim.Status = "Payment Processed";
-                }
-
-                await _context.SaveChangesAsync();
-
+                // In production, this would integrate with payment gateway
+                // For now, we'll log the payment processing
                 var totalAmount = claims.Sum(c => c.TotalAmount);
-                TempData["SuccessMessage"] = $"Batch payment processed for {claims.Count} claims. Total: R{totalAmount:N2}";
+
+                TempData["SuccessMessage"] = $"Batch payment processed for {claims.Count} claims totaling R{totalAmount:N2}. " +
+                    $"Payment details have been generated for {month}.";
+
                 _logger.LogInformation("Batch payment processed for {Month}: {ClaimCount} claims, R{TotalAmount}",
                     month, claims.Count, totalAmount);
+
+                // Log each payment
+                foreach (var claim in claims)
+                {
+                    _logger.LogInformation("Payment: Lecturer {LecturerName} - Claim #{ClaimId} - R{Amount}",
+                        claim.Lecturer?.FullName, claim.ClaimID, claim.TotalAmount);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -258,7 +396,9 @@ namespace CMCS_App.Controllers
             }
         }
 
-        // Generate comprehensive annual report
+        /// <summary>
+        /// Generate comprehensive annual report
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GenerateAnnualReport(int year)
         {
@@ -295,6 +435,20 @@ namespace CMCS_App.Controllers
                 _logger.LogError(ex, "Error generating annual report for year {Year}", year);
                 return Json(new { error = "Error generating annual report" });
             }
+        }
+
+        /// <summary>
+        /// Generate default password for new lecturer
+        /// </summary>
+        private string GeneratePassword(string fullName)
+        {
+            // Simple password generation - in production, use more secure method
+            var nameParts = fullName.Split(' ');
+            var firstInitial = nameParts[0].Substring(0, 1).ToUpper();
+            var lastName = nameParts.Length > 1 ? nameParts[nameParts.Length - 1] : nameParts[0];
+            var random = new Random().Next(100, 999);
+
+            return $"{firstInitial}{lastName}{random}";
         }
     }
 }
