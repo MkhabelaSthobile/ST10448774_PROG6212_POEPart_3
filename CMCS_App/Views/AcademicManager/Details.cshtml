@@ -1,0 +1,334 @@
+﻿@model CMCS_App.Models.Claim
+
+@{
+    ViewData["Title"] = "Claim Details - Manager";
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-danger">Claim Details - Final Verification</h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Status Alert -->
+    <div class="alert @GetStatusAlertClass(Model.Status)" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas @GetStatusIcon(Model.Status)"></i> Current Status: @Model.Status
+        </h5>
+
+        @if (Model.Status == "Approved by Coordinator")
+        {
+            <hr />
+            <p class="mb-0">
+                <i class="fas fa-info-circle"></i>
+                This claim has been approved by the Programme Coordinator and is now pending your final verification.
+            </p>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.RejectionReason))
+        {
+            <hr />
+            <p class="mb-0">
+                <strong>Rejection Reason:</strong><br />
+                <span class="text-danger">@Model.RejectionReason</span>
+            </p>
+        }
+    </div>
+
+    <!-- Claim Information -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0"><i class="fas fa-clipboard-check"></i> Claim Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Claim ID:</th>
+                            <td><strong class="text-primary">#@Model.ClaimID</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Lecturer Name:</th>
+                            <td><strong>@Model.Lecturer?.FullName</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Lecturer Email:</th>
+                            <td>@Model.Lecturer?.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Module Name:</th>
+                            <td><strong>@Model.ModuleName</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Month:</th>
+                            <td>@Model.Month</td>
+                        </tr>
+                        <tr>
+                            <th>Submission Date:</th>
+                            <td>@Model.SubmissionDate.ToString("dd MMMM yyyy HH:mm")</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6">
+
+                    <!-- Financials -->
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title text-muted">Financial Details</h6>
+
+                            <table class="table table-borderless mb-0">
+                                <tr>
+                                    <th width="50%">Hours Worked:</th>
+                                    <td><strong class="text-primary fs-5">@Model.HoursWorked hours</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Hourly Rate:</th>
+                                    <td><strong>R @Model.HourlyRate.ToString("N2")</strong></td>
+                                </tr>
+                                <tr><td colspan="2"><hr class="my-2" /></td></tr>
+                                <tr>
+                                    <th>Total Amount:</th>
+                                    <td>
+                                        <h3 class="text-success mb-0">R @Model.TotalAmount.ToString("N2")</h3>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Calculation -->
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="fas fa-calculator"></i> Payment Calculation:</h6>
+                        <p class="mb-0">
+                            <strong>@Model.HoursWorked</strong> hours ×
+                            <strong>R @Model.HourlyRate.ToString("N2")</strong>
+                            = <strong class="text-success">R @Model.TotalAmount.ToString("N2")</strong>
+                        </p>
+                    </div>
+
+                    <!-- Status Badge -->
+                    <div class="text-center mt-3">
+                        <span class="badge @GetStatusBadgeClass(Model.Status) fs-5 px-4 py-2">
+                            @Model.Status
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval History -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-history"></i> Approval History</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="timeline">
+
+                <!-- Submitted -->
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-primary"></div>
+                    <div class="timeline-content">
+                        <h6><i class="fas fa-upload"></i> Claim Submitted</h6>
+                        <p class="text-muted">@Model.SubmissionDate.ToString("dd MMM yyyy HH:mm")</p>
+                        <small>Submitted by @Model.Lecturer?.FullName</small>
+                    </div>
+                </div>
+
+                <!-- Coordinator Review -->
+                @if (Model.Status != "Submitted" && Model.Status != "Pending")
+                {
+                    <div class="timeline-item">
+                        <div class="timeline-marker @(Model.Status.Contains("Rejected by Coordinator") ? "bg-danger" : "bg-success")"></div>
+                        <div class="timeline-content">
+                            <h6>
+                                <i class="fas @(Model.Status.Contains("Rejected by Coordinator") ? "fa-times" : "fa-check")"></i>
+                                Coordinator Review
+                            </h6>
+                            <p class="text-muted">@Model.SubmissionDate.ToString("dd MMM yyyy HH:mm")</p>
+
+                            <small>
+                                @if (Model.Status.Contains("Rejected by Coordinator"))
+                                {
+                                    <span class="text-danger">Rejected by Programme Coordinator</span>
+                                }
+                                else
+                                {
+                                    <span class="text-success">Approved by Programme Coordinator</span>
+                                }
+                            </small>
+                        </div>
+                    </div>
+                }
+
+                <!-- Manager Review -->
+                @if (Model.Status == "Approved by Manager" || Model.Status.Contains("Rejected by Manager"))
+                {
+                    <div class="timeline-item">
+                        <div class="timeline-marker @(Model.Status.Contains("Rejected by Manager") ? "bg-danger" : "bg-success")"></div>
+
+                        <div class="timeline-content">
+                            <h6>
+                                <i class="fas @(Model.Status.Contains("Rejected by Manager") ? "fa-times" : "fa-check-double")"></i>
+                                Manager Final Verification
+                            </h6>
+
+                            <p class="text-muted">@DateTime.Now.ToString("dd MMM yyyy HH:mm")</p>
+
+                            <small>
+                                @if (Model.Status.Contains("Rejected by Manager"))
+                                {
+                                    <span class="text-danger">Rejected by Academic Manager</span>
+                                }
+                                else
+                                {
+                                    <span class="text-success">Approved for Payment by Academic Manager</span>
+                                }
+                            </small>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Supporting Documents -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0"><i class="fas fa-file-alt"></i> Supporting Documentation</h5>
+        </div>
+
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.SupportingDocument))
+            {
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-file-pdf fa-4x text-danger me-4"></i>
+
+                    <div>
+                        <h6>@Model.SupportingDocument</h6>
+                        <p class="text-muted">Review this document before final verification</p>
+
+                        <a asp-action="DownloadDocument"
+                           asp-route-claimId="@Model.ClaimID"
+                           asp-route-fileName="@Model.SupportingDocument"
+                           class="btn btn-primary btn-lg">
+
+                            <i class="fas fa-download"></i> Download & Verify
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>No supporting document provided.</strong>
+                </div>
+            }
+        </div>
+    </div>
+
+    
+
+</div>
+
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var rejectModal = document.getElementById('rejectModal');
+            if (rejectModal) {
+                rejectModal.addEventListener('shown.bs.modal', function () {
+                    document.getElementById('rejectionReason').focus();
+                });
+            }
+        });
+    </script>
+}
+
+<!-- Timeline Styles -->
+<style>
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+
+    .timeline-item {
+        position: relative;
+        padding-left: 50px;
+        margin-bottom: 30px;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: 8px;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+    }
+
+    .timeline-content {
+        background: #f8f9fa;
+        border-radius: 5px;
+        padding: 10px 15px;
+    }
+</style>
+
+@functions {
+    public string GetStatusBadgeClass(string status) =>
+        status switch
+        {
+            "Submitted" or "Pending" => "bg-warning text-dark",
+            "Approved by Coordinator" => "bg-info",
+            "Approved by Manager" => "bg-success",
+            _ when status.Contains("Rejected") => "bg-danger",
+            _ => "bg-secondary"
+        };
+
+    public string GetStatusAlertClass(string status) =>
+        status switch
+        {
+            "Submitted" or "Pending" => "alert-warning",
+            "Approved by Coordinator" => "alert-warning",
+            "Approved by Manager" => "alert-success",
+            _ when status.Contains("Rejected") => "alert-danger",
+            _ => "alert-secondary"
+        };
+
+    public string GetStatusIcon(string status) =>
+        status switch
+        {
+            "Submitted" or "Pending" => "fa-clock",
+            "Approved by Coordinator" => "fa-hourglass-half",
+            "Approved by Manager" => "fa-check-double",
+            _ when status.Contains("Rejected") => "fa-times-circle",
+            _ => "fa-info-circle"
+        };
+}

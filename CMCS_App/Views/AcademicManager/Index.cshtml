@@ -94,17 +94,33 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <form asp-action="Verify" method="post" class="d-inline">
+                                    <a asp-action="Details" asp-route-id="@claim.ClaimID"
+                                       class="btn btn-info btn-sm" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <form asp-action="Approve" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
                                         <input type="hidden" name="id" value="@claim.ClaimID" />
                                         <button type="submit" class="btn btn-success btn-sm"
-                                                onclick="return confirm('Are you sure you want to approve this claim for payment?')">
-                                            Approve Payment
+                                                onclick="return confirm('Are you sure you want to approve this claim?')"
+                                                title="Approve Claim">
+                                            <i class="fas fa-check"></i>
                                         </button>
                                     </form>
                                     <button type="button" class="btn btn-danger btn-sm"
-                                            data-bs-toggle="modal" data-bs-target="#rejectModal@(claim.ClaimID)">
-                                        Reject
+                                            data-bs-toggle="modal" data-bs-target="#rejectModal@(claim.ClaimID)"
+                                            title="Reject Claim">
+                                        <i class="fas fa-times"></i>
                                     </button>
+                                    <form asp-action="DeleteClaim" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@claim.ClaimID" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to delete this claim? This action cannot be undone.')"
+                                                title="Delete Claim">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
 
                                 <!-- Rejection Modal -->
@@ -166,6 +182,7 @@
                         <th>Final Status</th>
                         <th>Rejection Reason</th>
                         <th>Reviewed On</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -194,6 +211,12 @@
                                 }
                             </td>
                             <td>@claim.SubmissionDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@claim.ClaimID"
+                                   class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
                         </tr>
                     }
                     @if (!Model.Any(c => c.Status == "Approved by Manager" || c.Status.Contains("Rejected by Manager")))

@@ -1,0 +1,188 @@
+﻿@model CMCS_App.Models.Claim
+
+@{
+    ViewData["Title"] = "Claim Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Claim Details</h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Status Alert -->
+    <div class="alert @GetStatusAlertClass(Model.Status)" role="alert">
+        <h5 class="alert-heading">
+            <i class="fas @GetStatusIcon(Model.Status)"></i> Claim Status: @Model.Status
+        </h5>
+        @if (!string.IsNullOrEmpty(Model.RejectionReason))
+        {
+            <hr>
+            <p class="mb-0">
+                <strong>Rejection Reason:</strong><br />
+                <span class="text-danger">@Model.RejectionReason</span>
+            </p>
+        }
+    </div>
+
+    <!-- Claim Information Card -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Claim Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Claim ID:</th>
+                            <td><strong>#@Model.ClaimID</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Lecturer Name:</th>
+                            <td>@Model.Lecturer?.FullName</td>
+                        </tr>
+                        <tr>
+                            <th>Module Name:</th>
+                            <td>@Model.ModuleName</td>
+                        </tr>
+                        <tr>
+                            <th>Month:</th>
+                            <td>@Model.Month</td>
+                        </tr>
+                        <tr>
+                            <th>Submission Date:</th>
+                            <td>@Model.SubmissionDate.ToString("dd MMMM yyyy HH:mm")</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Hours Worked:</th>
+                            <td><strong>@Model.HoursWorked hours</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Hourly Rate:</th>
+                            <td>R @Model.HourlyRate.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <th>Total Amount:</th>
+                            <td><h4 class="text-success mb-0">R @Model.TotalAmount.ToString("N2")</h4></td>
+                        </tr>
+                        <tr>
+                            <th>Current Status:</th>
+                            <td>
+                                <span class="badge @GetStatusBadgeClass(Model.Status) fs-6">
+                                    @Model.Status
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Calculation Breakdown -->
+            <div class="alert alert-info mt-3">
+                <h6><i class="fas fa-calculator"></i> Calculation Breakdown:</h6>
+                <p class="mb-0">
+                    @Model.HoursWorked hours × R @Model.HourlyRate.ToString("N2") = <strong>R @Model.TotalAmount.ToString("N2")</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supporting Document Card -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0"><i class="fas fa-file-alt"></i> Supporting Document</h5>
+        </div>
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.SupportingDocument))
+            {
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-file-pdf fa-3x text-danger me-3"></i>
+                    <div>
+                        <h6 class="mb-1">@Model.SupportingDocument</h6>
+                        <a asp-action="DownloadDocument" asp-route-claimId="@Model.ClaimID"
+                           asp-route-fileName="@Model.SupportingDocument"
+                           class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download Document
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-3">
+                    <i class="fas fa-inbox fa-3x mb-2"></i>
+                    <p class="mb-0">No supporting document was uploaded with this claim.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Actions Card -->
+    @if (Model.Status == "Submitted")
+    {
+        <div class="card shadow-sm border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Available Actions</h5>
+            </div>
+            <div class="card-body">
+                <p>This claim is currently pending review. You can delete it if needed:</p>
+                <form asp-action="DeleteClaim" method="post" class="d-inline"
+                      onsubmit="return confirm('Are you sure you want to delete this claim? This action cannot be undone.');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.ClaimID" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete Claim
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Submitted" => "bg-warning text-dark",
+            "Pending" => "bg-warning text-dark",
+            "Approved by Coordinator" => "bg-info",
+            "Approved by Manager" => "bg-success",
+            _ when status.Contains("Rejected") => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    public string GetStatusAlertClass(string status)
+    {
+        return status switch
+        {
+            "Submitted" => "alert-warning",
+            "Pending" => "alert-warning",
+            "Approved by Coordinator" => "alert-info",
+            "Approved by Manager" => "alert-success",
+            _ when status.Contains("Rejected") => "alert-danger",
+            _ => "alert-secondary"
+        };
+    }
+
+    public string GetStatusIcon(string status)
+    {
+        return status switch
+        {
+            "Submitted" => "fa-clock",
+            "Pending" => "fa-clock",
+            "Approved by Coordinator" => "fa-check-circle",
+            "Approved by Manager" => "fa-check-double",
+            _ when status.Contains("Rejected") => "fa-times-circle",
+            _ => "fa-info-circle"
+        };
+    }
+}

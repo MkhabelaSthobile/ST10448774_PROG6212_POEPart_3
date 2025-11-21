@@ -7,6 +7,15 @@
 <div class="container mt-4">
     <h2 class="mb-4 text-primary">Lecturer Dashboard</h2>
 
+    @if (ViewBag.LecturerName != null)
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-user"></i> <strong>Welcome, @ViewBag.LecturerName</strong> |
+            <i class="fas fa-book"></i> Module: @ViewBag.ModuleName |
+            <i class="fas fa-money-bill-wave"></i> Your Hourly Rate: <strong>R @ViewBag.HourlyRate.ToString("N2")</strong>
+        </div>
+    }
+
     <!-- Success/Error Messages -->
     @if (TempData["SuccessMessage"] != null)
     {
@@ -35,8 +44,8 @@
                 <!-- Instructions Alert -->
                 <div class="alert alert-info" role="alert">
                     <i class="fas fa-info-circle"></i> <strong>Quick Guide:</strong>
-                    Fill in your module details, hours worked, and hourly rate. The total amount will be calculated automatically.
-                    Upload supporting documents if you have any (this is optional). Click "Submit Claim" when ready.
+                    Fill in your module details and hours worked. Your hourly rate of <strong>R @(ViewBag.HourlyRate?.ToString("N2") ?? "0.00")</strong> will be applied automatically.
+                    Upload supporting documents if you have any (optional). Click "Submit Claim" when ready.
                 </div>
 
                 <div class="row">
@@ -46,18 +55,9 @@
                                 Module Name <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" id="ModuleName" name="ModuleName"
-                                   required placeholder="e.g., Computer Science" maxlength="100" />
+                                   required placeholder="e.g., Computer Science" maxlength="100"
+                                   value="@ViewBag.ModuleName" />
                             <div class="form-text">Enter the name of the module you're teaching</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="HourlyRate" class="form-label">
-                                Hourly Rate (R) <span class="text-danger">*</span>
-                            </label>
-                            <input type="number" class="form-control" id="HourlyRate" name="HourlyRate"
-                                   step="0.01" min="0.01" max="1000" required
-                                   placeholder="Enter hourly rate" />
-                            <small class="form-text text-muted">Rate must be between R0.01 and R1000.00</small>
                         </div>
 
                         <div class="mb-3">
@@ -94,16 +94,29 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="HourlyRate" class="form-label">
+                                Hourly Rate (R) <span class="badge bg-secondary">Fixed Rate</span>
+                            </label>
+                            <input type="text" class="form-control bg-light" id="HourlyRate" readonly
+                                   value="R @(ViewBag.HourlyRate?.ToString("N2") ?? "0.00")" />
+                            <div class="form-text text-info">
+                                <i class="fas fa-lock"></i> This is your registered hourly rate and cannot be changed.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="TotalAmount" class="form-label">
                                 Total Amount (R) <span class="badge bg-secondary">Auto-calculated</span>
                             </label>
                             <input type="text" class="form-control bg-light" id="TotalAmount" readonly
                                    placeholder="Will be calculated automatically" />
                             <div class="form-text text-success" id="calculationInfo">
-                                <i class="fas fa-calculator"></i> Total = Hours Worked × Hourly Rate
+                                <i class="fas fa-calculator"></i> Total = Hours Worked × R @(ViewBag.HourlyRate?.ToString("N2") ?? "0.00")
                             </div>
                         </div>
+                    </div>
 
+                    <div class="col-md-12">
                         <div class="mb-3">
                             <label for="SupportingDocument" class="form-label">
                                 Upload Supporting Document
@@ -277,37 +290,6 @@
     </div>
 </div>
 
-<!-- Success Modal for Claim Submission -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-check-circle"></i> Claim Submitted Successfully!
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center py-3">
-                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
-                    <h4 class="mt-3">Your claim has been submitted!</h4>
-                    <p class="text-muted">
-                        Claim ID: <strong id="modalClaimId"></strong><br>
-                        Total Amount: <strong id="modalTotalAmount"></strong><br>
-                        Status: <span class="badge bg-warning">Pending Review</span>
-                    </p>
-                    <p>You will be notified once the Programme Coordinator reviews your claim.</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-check"></i> Got it!
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts {
     <script>
         // Initialize tooltips
@@ -319,7 +301,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('claimForm');
             const hoursInput = document.getElementById('HoursWorked');
-            const rateInput = document.getElementById('HourlyRate');
             const totalInput = document.getElementById('TotalAmount');
             const fileInput = document.getElementById('SupportingDocument');
             const fileInfo = document.getElementById('fileInfo');
@@ -328,22 +309,23 @@
             const validationSummary = document.getElementById('validationSummary');
             const validationList = document.getElementById('validationList');
 
+            // Get hourly rate from server
+            const hourlyRate = @(ViewBag.HourlyRate ?? 0);
+
             // Calculate total amount automatically
             function calculateTotal() {
                 const hours = parseFloat(hoursInput.value) || 0;
-                const rate = parseFloat(rateInput.value) || 0;
-                const total = hours * rate;
+                const total = hours * hourlyRate;
                 totalInput.value = 'R ' + total.toFixed(2);
 
                 // Update calculation info with animation
-                if (hours > 0 && rate > 0) {
+                if (hours > 0) {
                     document.getElementById('calculationInfo').innerHTML =
-                        '<i class="fas fa-calculator"></i> ' + hours + ' hours × R' + rate.toFixed(2) + ' = <strong>R' + total.toFixed(2) + '</strong>';
+                        '<i class="fas fa-calculator"></i> ' + hours + ' hours × R' + hourlyRate.toFixed(2) + ' = <strong>R' + total.toFixed(2) + '</strong>';
                 }
             }
 
             hoursInput.addEventListener('input', calculateTotal);
-            rateInput.addEventListener('input', calculateTotal);
 
             // Real-time form validation
             function validateForm() {
@@ -351,7 +333,6 @@
 
                 const moduleName = document.getElementById('ModuleName').value.trim();
                 const hours = parseFloat(hoursInput.value);
-                const rate = parseFloat(rateInput.value);
                 const month = document.getElementById('Month').value;
 
                 if (!moduleName) {
@@ -362,9 +343,6 @@
                 }
                 if (isNaN(hours) || hours < 1 || hours > 200) {
                     errors.push('Hours must be between 1 and 200');
-                }
-                if (isNaN(rate) || rate < 0.01 || rate > 1000) {
-                    errors.push('Hourly rate must be between R0.01 and R1000');
                 }
 
                 if (errors.length > 0) {
@@ -438,17 +416,6 @@
                     bsAlert.close();
                 });
             }, 8000);
-
-            // Show success modal if claim was just submitted (check for success message)
-            @if (TempData["SuccessMessage"] != null && TempData["SuccessMessage"].ToString().Contains("submitted"))
-            {
-                    <text>
-                    setTimeout(function() {
-                        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                        successModal.show();
-                    }, 500);
-                    </text>
-            }
         });
     </script>
 }

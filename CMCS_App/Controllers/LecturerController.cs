@@ -2,6 +2,7 @@
 using CMCS_App.Models;
 using CMCS_App.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CMCS_App.Controllers
 {
@@ -22,7 +23,23 @@ namespace CMCS_App.Controllers
         {
             try
             {
-                int currentLecturerId = 1;
+                // Get current lecturer ID from claims
+                var lecturerIdClaim = User.FindFirst("LecturerID")?.Value;
+
+                if (string.IsNullOrEmpty(lecturerIdClaim) || !int.TryParse(lecturerIdClaim, out int currentLecturerId))
+                {
+                    TempData["ErrorMessage"] = "Unable to identify lecturer. Please log in again.";
+                    return RedirectToAction("Login", "User");
+                }
+
+                // Get lecturer info for hourly rate
+                var lecturer = _context.Lecturers.FirstOrDefault(l => l.LecturerID == currentLecturerId);
+                if (lecturer != null)
+                {
+                    ViewBag.LecturerName = lecturer.FullName;
+                    ViewBag.HourlyRate = lecturer.HourlyRate;
+                    ViewBag.ModuleName = lecturer.ModuleName;
+                }
 
                 var claims = _context.Claims
                     .Include(c => c.Lecturer)
@@ -37,16 +54,34 @@ namespace CMCS_App.Controllers
             {
                 _logger.LogError(ex, "Error loading lecturer dashboard");
                 TempData["ErrorMessage"] = "Error loading dashboard. Please check database connection.";
-                return View(new List<Claim>());
+                return View(new List<Models.Claim>());
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitClaim(string moduleName, string month, int hoursWorked, decimal hourlyRate, IFormFile supportingDocument)
+        public async Task<IActionResult> SubmitClaim(string moduleName, string month, int hoursWorked, IFormFile supportingDocument)
         {
             try
             {
+                // Get current lecturer ID from claims
+                var lecturerIdClaim = User.FindFirst("LecturerID")?.Value;
+
+                if (string.IsNullOrEmpty(lecturerIdClaim) || !int.TryParse(lecturerIdClaim, out int currentLecturerId))
+                {
+                    TempData["ErrorMessage"] = "Unable to identify lecturer. Please log in again.";
+                    return RedirectToAction("Login", "User");
+                }
+
+                // Get lecturer's hourly rate from database
+                var lecturer = await _context.Lecturers.FindAsync(currentLecturerId);
+
+                if (lecturer == null)
+                {
+                    TempData["ErrorMessage"] = "Lecturer not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
                 if (string.IsNullOrWhiteSpace(moduleName) || string.IsNullOrWhiteSpace(month))
                 {
                     TempData["ErrorMessage"] = "Module name and month are required.";
@@ -59,19 +94,13 @@ namespace CMCS_App.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                if (hourlyRate < 0.01m || hourlyRate > 1000m)
+                var claim = new Models.Claim
                 {
-                    TempData["ErrorMessage"] = "Hourly rate must be between R0.01 and R1000.";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                var claim = new Claim
-                {
-                    LecturerID = 1,
+                    LecturerID = currentLecturerId,
                     ModuleName = moduleName.Trim(),
                     Month = month,
                     HoursWorked = hoursWorked,
-                    HourlyRate = hourlyRate,
+                    HourlyRate = lecturer.HourlyRate, // Use lecturer's registered hourly rate
                     SubmissionDate = DateTime.Now,
                     Status = "Submitted"
                 };
@@ -98,7 +127,7 @@ namespace CMCS_App.Controllers
                 TempData["SuccessMessage"] = $"Claim submitted successfully! Total Amount: R{claim.TotalAmount:N2}" +
                     (claim.SupportingDocument != null ? " | Document uploaded." : "");
 
-                _logger.LogInformation($"Claim {claim.ClaimID} submitted successfully by lecturer 1");
+                _logger.LogInformation($"Claim {claim.ClaimID} submitted successfully by lecturer {currentLecturerId}");
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException dbEx)
@@ -174,7 +203,13 @@ namespace CMCS_App.Controllers
 
             try
             {
-                int currentLecturerId = 1;
+                var lecturerIdClaim = User.FindFirst("LecturerID")?.Value;
+
+                if (string.IsNullOrEmpty(lecturerIdClaim) || !int.TryParse(lecturerIdClaim, out int currentLecturerId))
+                {
+                    return Unauthorized();
+                }
+
                 var claim = await _context.Claims
                     .FirstOrDefaultAsync(c => c.ClaimID == claimId && c.LecturerID == currentLecturerId);
 
@@ -232,13 +267,20 @@ namespace CMCS_App.Controllers
         {
             try
             {
-                int currentLecturerId = 1;
+                var lecturerIdClaim = User.FindFirst("LecturerID")?.Value;
+
+                if (string.IsNullOrEmpty(lecturerIdClaim) || !int.TryParse(lecturerIdClaim, out int currentLecturerId))
+                {
+                    return Unauthorized();
+                }
+
                 var claim = await _context.Claims
                     .FirstOrDefaultAsync(c => c.ClaimID == id && c.LecturerID == currentLecturerId);
 
                 if (claim == null)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Claim not found or you don't have permission to delete it.";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 if (claim.Status != "Submitted")
@@ -275,13 +317,21 @@ namespace CMCS_App.Controllers
         {
             try
             {
+                var lecturerIdClaim = User.FindFirst("LecturerID")?.Value;
+
+                if (string.IsNullOrEmpty(lecturerIdClaim) || !int.TryParse(lecturerIdClaim, out int currentLecturerId))
+                {
+                    return Unauthorized();
+                }
+
                 var claim = await _context.Claims
                     .Include(c => c.Lecturer)
-                    .FirstOrDefaultAsync(c => c.ClaimID == id);
+                    .FirstOrDefaultAsync(c => c.ClaimID == id && c.LecturerID == currentLecturerId);
 
-                if (claim == null || claim.LecturerID != 1)
+                if (claim == null)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Claim not found or you don't have permission to view it.";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 return View(claim);

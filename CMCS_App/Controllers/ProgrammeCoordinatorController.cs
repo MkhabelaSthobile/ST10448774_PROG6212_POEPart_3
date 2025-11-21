@@ -118,7 +118,8 @@ namespace CMCS_App.Controllers
 
                 if (claim == null)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Claim not found.";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 return View(claim);
@@ -130,5 +131,47 @@ namespace CMCS_App.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteClaim(int id)
+        {
+            try
+            {
+                var claim = await _context.Claims
+                    .Include(c => c.Lecturer)
+                    .FirstOrDefaultAsync(c => c.ClaimID == id);
+
+                if (claim == null)
+                {
+                    TempData["ErrorMessage"] = "Claim not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Coordinators can only delete submitted/pending claims
+                if (claim.Status != "Submitted" && claim.Status != "Pending")
+                {
+                    TempData["ErrorMessage"] = "Cannot delete claim that has already been approved or rejected.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var lecturerName = claim.Lecturer?.FullName ?? "Unknown";
+
+                _context.Claims.Remove(claim);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = $"Claim #{id} for {lecturerName} has been deleted successfully.";
+                _logger.LogInformation($"Claim {id} deleted by coordinator");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting claim: {ClaimId}", id);
+                TempData["ErrorMessage"] = "Error deleting claim. Please try again.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }
