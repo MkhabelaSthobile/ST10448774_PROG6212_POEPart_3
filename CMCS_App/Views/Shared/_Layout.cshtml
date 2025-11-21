@@ -12,28 +12,159 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+            <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-file-invoice-dollar"></i> CMCS
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Index">Lecturer</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProgrammeCoordinator" asp-action="Index">Programme Coordinator</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AcademicManager" asp-action="Index">Academic Manager</a>
-                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            @* Lecturer menu *@
+                            @if (User.IsInRole("Lecturer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Index">
+                                        <i class="fas fa-home"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lecturer" asp-action="Index">
+                                        <i class="fas fa-file-invoice"></i> My Claims
+                                    </a>
+                                </li>
+                            }
+
+                            @* Programme Coordinator menu *@
+                            @if (User.IsInRole("Coordinator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProgrammeCoordinator" asp-action="Index">
+                                        <i class="fas fa-home"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ProgrammeCoordinator" asp-action="Index">
+                                        <i class="fas fa-tasks"></i> Pending Claims
+                                    </a>
+                                </li>
+                            }
+
+                            @* Academic Manager menu *@
+                            @if (User.IsInRole("Manager"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AcademicManager" asp-action="Index">
+                                        <i class="fas fa-home"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AcademicManager" asp-action="Index">
+                                        <i class="fas fa-check-circle"></i> Verify Claims
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AcademicManager" asp-action="GenerateReport">
+                                        <i class="fas fa-chart-bar"></i> Reports
+                                    </a>
+                                </li>
+                            }
+
+                            @* HR menu *@
+                            @if (User.IsInRole("HR"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="HR" asp-action="Index">
+                                        <i class="fas fa-home"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="HR" asp-action="ClaimsRequiringAttention">
+                                        <i class="fas fa-file-invoice"></i> All Claims
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="HR" asp-action="ManageLecturers">
+                                        <i class="fas fa-users"></i> Manage Lecturers
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-chart-line"></i> Reports
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="HR" asp-action="GenerateInvoiceReport">
+                                                <i class="fas fa-file-invoice-dollar"></i> Invoice Report
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="HR" asp-action="GeneratePaymentSummary">
+                                                <i class="fas fa-money-check-alt"></i> Payment Summary
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="HR" asp-action="ExportToCSV" asp-route-reportType="claims">
+                                                <i class="fas fa-download"></i> Export Claims CSV
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="HR" asp-action="ExportToCSV" asp-route-reportType="lecturers">
+                                                <i class="fas fa-download"></i> Export Lecturers CSV
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="HR" asp-action="ExportToCSV" asp-route-reportType="financial">
+                                                <i class="fas fa-download"></i> Export Financial CSV
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    @* User info and logout *@
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i> @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <span class="dropdown-item-text">
+                                            <strong>@User.Identity.Name</strong><br>
+                                            <small class="text-muted">@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value</small><br>
+                                            <small class="text-muted">Role: @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</small>
+                                        </span>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-controller="User" asp-action="Logout" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to logout?')">
+                                                <i class="fas fa-sign-out-alt"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Login">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

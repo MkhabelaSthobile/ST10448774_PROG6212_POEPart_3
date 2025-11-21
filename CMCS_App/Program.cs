@@ -76,7 +76,7 @@ namespace CMCS_App
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=User}/{action=Login}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("CMCS Application started successfully at {Time}", DateTime.Now);

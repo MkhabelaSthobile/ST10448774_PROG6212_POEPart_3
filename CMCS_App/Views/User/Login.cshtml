@@ -1,0 +1,301 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CMCS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .login-left {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+        }
+
+        .login-right {
+            padding: 60px 40px;
+        }
+
+        .credentials-section {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .credentials-table {
+            width: 100%;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+            .credentials-table th {
+                color: #495057;
+                font-weight: 600;
+                padding: 12px 8px;
+                text-align: left;
+                border-bottom: 2px solid #dee2e6;
+                background-color: #e9ecef;
+            }
+
+            .credentials-table td {
+                padding: 10px 8px;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .credentials-table tbody tr:hover {
+                background-color: #f1f3f5;
+            }
+
+        .role-badge {
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .info-badge {
+            background: #17a2b8;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: transform 0.2s;
+        }
+
+            .btn-login:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="row g-0 login-card">
+            <!-- Left Side - Branding -->
+            <div class="col-lg-5 login-left">
+                <div class="text-center mb-4">
+                    <i class="fas fa-file-invoice-dollar fa-5x mb-3"></i>
+                    <h1 class="display-4 fw-bold">CMCS</h1>
+                    <p class="lead">Contract Monthly Claim System</p>
+                </div>
+
+                <div class="mt-5">
+                    <h4><i class="fas fa-check-circle me-2"></i> Automated Claim Processing</h4>
+                    <p>Submit and track claims with real-time validation</p>
+
+                    <h4><i class="fas fa-chart-line me-2"></i> Smart Workflows</h4>
+                    <p>Automated approval workflows and reporting</p>
+
+                    <h4><i class="fas fa-shield-alt me-2"></i> Secure & Reliable</h4>
+                    <p>Enterprise-grade security for your data</p>
+
+                    <h4><i class="fas fa-users me-2"></i> Role-Based Access</h4>
+                    <p>Customized dashboards for each user role</p>
+                </div>
+            </div>
+
+            <!-- Right Side - Login Form -->
+            <div class="col-lg-7 login-right">
+                <h2 class="mb-4 fw-bold">Welcome Back</h2>
+                <p class="text-muted mb-4">Please login to access your dashboard</p>
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form asp-controller="User" asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">
+                            <i class="fas fa-envelope me-2"></i>Email Address
+                        </label>
+                        <input type="email" class="form-control form-control-lg" id="email" name="email"
+                               required placeholder="Enter your email address" autofocus />
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <input type="password" class="form-control form-control-lg" id="password" name="password"
+                               required placeholder="Enter your password" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-login w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
+                    </button>
+                </form>
+
+                <!-- Test Credentials Section -->
+                <div class="credentials-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold">
+                            <i class="fas fa-key me-2"></i>Available User Accounts
+                        </h6>
+                        <span class="info-badge">Active Credentials</span>
+                    </div>
+
+                    <p class="small text-muted mb-3">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Use any of the credentials below to login. Credentials are stored securely in the database.
+                    </p>
+
+                    <div class="table-responsive">
+                        <table class="credentials-table">
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>Email</th>
+                                    <th>Password</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="role-badge">HR Admin</span></td>
+                                    <td>hr1@cmcs.ac.za</td>
+                                    <td><code>ADMIN001!</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge">HR Admin</span></td>
+                                    <td>hr2@cmcs.ac.za</td>
+                                    <td><code>ADMIN002!</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0d6efd;">Lecturer</span></td>
+                                    <td>john.smith@university.ac.za</td>
+                                    <td><code>JS5523</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0d6efd;">Lecturer</span></td>
+                                    <td>sarah.wilson@university.ac.za</td>
+                                    <td><code>WilSarah101</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0d6efd;">Lecturer</span></td>
+                                    <td>michael.brown@university.ac.za</td>
+                                    <td><code>MBrown_599</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0d6efd;">Lecturer</span></td>
+                                    <td>emily.davis@university.ac.za</td>
+                                    <td><code>EDPW156</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0dcaf0;">Coordinator</span></td>
+                                    <td>david.johnson@university.ac.za</td>
+                                    <td><code>PCDavid@001!</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0dcaf0;">Coordinator</span></td>
+                                    <td>lisa.anderson@university.ac.za</td>
+                                    <td><code>PCLaraJean@002!</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #0dcaf0;">Coordinator</span></td>
+                                    <td>amy.schnitzel@university.ac.za</td>
+                                    <td><code>PCAmy@003!</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #dc3545;">Manager</span></td>
+                                    <td>james.carb@university.ac.za</td>
+                                    <td><code>JCAM@6633</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #dc3545;">Manager</span></td>
+                                    <td>sarah.martinezzz@university.ac.za</td>
+                                    <td><code>SMAM@1254</code></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="role-badge" style="background: #dc3545;">Manager</span></td>
+                                    <td>liam.payyyne@university.ac.za</td>
+                                    <td><code>LPAM@5821</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="alert alert-info mt-3 mb-0" style="font-size: 13px;">
+                        <i class="fas fa-database me-2"></i>
+                        <strong>Note:</strong> HR credentials are stored in the Users table.
+                        Other users authenticate via their respective tables (Lecturers, ProgrammeCoordinators, AcademicManagers).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4 text-white">
+            <p class="mb-1">&copy; 2025 CMCS - Contract Monthly Claim System</p>
+            <p class="small">Secure • Automated • Reliable</p>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    </script>
+</body>
+</html>

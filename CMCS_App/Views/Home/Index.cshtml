@@ -2,178 +2,364 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to CMCS</h1>
-    <p class="lead">Contract Monthly Claim System</p>
-    <p class="text-muted">Automated claim management for educational institutions</p>
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 0;
+        margin: -20px -15px 50px -15px;
+        text-align: center;
+    }
 
-    <div class="row mt-5 g-4">
-        <div class="col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-user-graduate text-primary" style="font-size: 3rem;"></i>
-                    </div>
-                    <h5 class="card-title">Lecturer</h5>
-                    <p class="card-text">Submit and track your monthly claims</p>
-                    <ul class="list-unstyled text-start small">
-                        <li><i class="fas fa-check text-success"></i> Auto-calculation</li>
-                        <li><i class="fas fa-check text-success"></i> Document upload</li>
-                        <li><i class="fas fa-check text-success"></i> Real-time tracking</li>
-                    </ul>
-                    <a href="@Url.Action("Index", "Lecturer")" class="btn btn-primary w-100">
-                        <i class="fas fa-arrow-right"></i> Go to Dashboard
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2rem;
+    }
+
+    .feature-card {
+        border: none;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+    .role-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 5px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h2 {
+            color: #667eea;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+    .workflow-step {
+        text-align: center;
+        padding: 20px;
+    }
+
+        .workflow-step .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-lg-start text-center">
+                <h1 class="display-3 fw-bold mb-4">Contract Monthly Claim System</h1>
+                <p class="lead mb-4">
+                    Streamline your claim management process with automated workflows,
+                    real-time tracking, and comprehensive reporting.
+                </p>
+                <div class="d-flex gap-3 justify-content-lg-start justify-content-center">
+                    <a asp-controller="User" asp-action="Login" class="btn btn-light btn-lg px-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Dashboard
                     </a>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-user-tie text-info" style="font-size: 3rem;"></i>
-                    </div>
-                    <h5 class="card-title">Programme Coordinator</h5>
-                    <p class="card-text">Review and approve lecturer claims</p>
-                    <ul class="list-unstyled text-start small">
-                        <li><i class="fas fa-check text-success"></i> Auto-validation</li>
-                        <li><i class="fas fa-check text-success"></i> Quick approval</li>
-                        <li><i class="fas fa-check text-success"></i> Rejection tracking</li>
-                    </ul>
-                    <a href="@Url.Action("Index", "ProgrammeCoordinator")" class="btn btn-info w-100">
-                        <i class="fas fa-arrow-right"></i> Go to Dashboard
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-user-cog text-danger" style="font-size: 3rem;"></i>
-                    </div>
-                    <h5 class="card-title">Academic Manager</h5>
-                    <p class="card-text">Final verification and reporting</p>
-                    <ul class="list-unstyled text-start small">
-                        <li><i class="fas fa-check text-success"></i> Final approval</li>
-                        <li><i class="fas fa-check text-success"></i> Report generation</li>
-                        <li><i class="fas fa-check text-success"></i> Statistics</li>
-                    </ul>
-                    <a href="@Url.Action("Index", "AcademicManager")" class="btn btn-danger w-100">
-                        <i class="fas fa-arrow-right"></i> Go to Dashboard
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-users-cog text-success" style="font-size: 3rem;"></i>
-                    </div>
-                    <h5 class="card-title">HR Management</h5>
-                    <p class="card-text">Manage users and generate reports</p>
-                    <ul class="list-unstyled text-start small">
-                        <li><i class="fas fa-check text-success"></i> User management</li>
-                        <li><i class="fas fa-check text-success"></i> Payment processing</li>
-                        <li><i class="fas fa-check text-success"></i> Advanced reports</li>
-                    </ul>
-                    <a href="@Url.Action("Index", "HR")" class="btn btn-success w-100">
-                        <i class="fas fa-arrow-right"></i> Go to Dashboard
-                    </a>
-                </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <i class="fas fa-file-invoice-dollar" style="font-size: 12rem; opacity: 0.9;"></i>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Features Section -->
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h3 class="mb-4">Key Features</h3>
-        </div>
-    </div>
-
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card border-primary">
-                <div class="card-body text-center">
-                    <i class="fas fa-calculator fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">Auto-Calculation</h5>
-                    <p class="card-text">Automatic calculation of claim totals with real-time validation</p>
-                </div>
+<!-- Statistics Section -->
+<div class="container mb-5">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-bolt text-warning" style="font-size: 2.5rem;"></i>
+                <h2>100%</h2>
+                <p class="text-muted mb-0">Automated</p>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card border-info">
-                <div class="card-body text-center">
-                    <i class="fas fa-robot fa-3x text-info mb-3"></i>
-                    <h5 class="card-title">Automated Workflows</h5>
-                    <p class="card-text">Smart automation for claim validation and approval processes</p>
-                </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-shield-alt text-success" style="font-size: 2.5rem;"></i>
+                <h2>Secure</h2>
+                <p class="text-muted mb-0">Data Protection</p>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card border-success">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Comprehensive Reports</h5>
-                    <p class="card-text">Generate detailed financial and performance reports instantly</p>
-                </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-users text-info" style="font-size: 2.5rem;"></i>
+                <h2>4</h2>
+                <p class="text-muted mb-0">User Roles</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-clock text-danger" style="font-size: 2.5rem;"></i>
+                <h2>24/7</h2>
+                <p class="text-muted mb-0">Access</p>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card border-warning">
-                <div class="card-body text-center">
-                    <i class="fas fa-file-upload fa-3x text-warning mb-3"></i>
-                    <h5 class="card-title">Document Management</h5>
-                    <p class="card-text">Upload and manage supporting documents securely</p>
+<!-- System Roles Section -->
+<div class="container mb-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold mb-3">System Roles & Access</h2>
+        <p class="lead text-muted">Secure role-based access for all stakeholders</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-opacity-10">
+                        <i class="fas fa-user-graduate text-primary"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Lecturer</h5>
+                    <p class="card-text text-muted small">
+                        Submit monthly claims, upload documents, and track approval status in real-time.
+                    </p>
+                    <div class="mt-3">
+                        <span class="badge bg-primary bg-opacity-10 text-primary">Submit Claims</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary">Track Status</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card border-danger">
-                <div class="card-body text-center">
-                    <i class="fas fa-bell fa-3x text-danger mb-3"></i>
-                    <h5 class="card-title">Real-Time Tracking</h5>
-                    <p class="card-text">Track claim status and receive instant notifications</p>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-info bg-opacity-10">
+                        <i class="fas fa-user-tie text-info"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Programme Coordinator</h5>
+                    <p class="card-text text-muted small">
+                        Review and approve submitted claims with automated validation support.
+                    </p>
+                    <div class="mt-3">
+                        <span class="badge bg-info bg-opacity-10 text-info">Review Claims</span>
+                        <span class="badge bg-info bg-opacity-10 text-info">Approve/Reject</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card border-secondary">
-                <div class="card-body text-center">
-                    <i class="fas fa-shield-alt fa-3x text-secondary mb-3"></i>
-                    <h5 class="card-title">Secure & Reliable</h5>
-                    <p class="card-text">Enterprise-grade security with data validation</p>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-danger bg-opacity-10">
+                        <i class="fas fa-user-cog text-danger"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Academic Manager</h5>
+                    <p class="card-text text-muted small">
+                        Final verification, payment approval, and comprehensive reporting.
+                    </p>
+                    <div class="mt-3">
+                        <span class="badge bg-danger bg-opacity-10 text-danger">Verify</span>
+                        <span class="badge bg-danger bg-opacity-10 text-danger">Reports</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-success bg-opacity-10">
+                        <i class="fas fa-users-cog text-success"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">HR Management</h5>
+                    <p class="card-text text-muted small">
+                        Manage users, process payments, and generate financial reports.
+                    </p>
+                    <div class="mt-3">
+                        <span class="badge bg-success bg-opacity-10 text-success">User Admin</span>
+                        <span class="badge bg-success bg-opacity-10 text-success">Payments</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .card {
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+<!-- Workflow Section -->
+<div class="container mb-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+        <p class="lead text-muted">Simple, automated workflow from submission to payment</p>
+    </div>
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
-        }
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="workflow-step">
+                <div class="step-number">1</div>
+                <h5 class="fw-bold">Submit</h5>
+                <p class="text-muted small">
+                    Lecturers submit monthly claims with automated calculation and validation
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="workflow-step">
+                <div class="step-number">2</div>
+                <h5 class="fw-bold">Review</h5>
+                <p class="text-muted small">
+                    Programme Coordinators review and approve claims with smart workflows
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="workflow-step">
+                <div class="step-number">3</div>
+                <h5 class="fw-bold">Verify</h5>
+                <p class="text-muted small">
+                    Academic Managers perform final verification and approval
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="workflow-step">
+                <div class="step-number">4</div>
+                <h5 class="fw-bold">Process</h5>
+                <p class="text-muted small">
+                    HR processes payments and generates comprehensive reports
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-</style>
+<!-- Key Features Section -->
+<div class="container mb-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold mb-3">Key Features</h2>
+        <p class="lead text-muted">Everything you need for efficient claim management</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-calculator fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold">Auto-Calculation</h5>
+                    <p class="card-text text-muted">
+                        Automatic calculation of claim totals with real-time validation and error checking
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-robot fa-3x text-info mb-3"></i>
+                    <h5 class="card-title fw-bold">Smart Automation</h5>
+                    <p class="card-text text-muted">
+                        Intelligent workflows that automatically validate and route claims for approval
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-file-upload fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title fw-bold">Document Management</h5>
+                    <p class="card-text text-muted">
+                        Secure upload and storage of supporting documents with easy retrieval
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h5 class="card-title fw-bold">Advanced Reports</h5>
+                    <p class="card-text text-muted">
+                        Comprehensive financial and performance reports with CSV export
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-bell fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title fw-bold">Real-Time Tracking</h5>
+                    <p class="card-text text-muted">
+                        Track claim status at every stage with instant notifications and updates
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-shield-alt fa-3x text-secondary mb-3"></i>
+                    <h5 class="card-title fw-bold">Enterprise Security</h5>
+                    <p class="card-text text-muted">
+                        Bank-level security with role-based access and data encryption
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="container mb-5">
+    <div class="card shadow-lg border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="card-body text-center text-white p-5">
+            <h2 class="display-5 fw-bold mb-3">Ready to Get Started?</h2>
+            <p class="lead mb-4">Login to access your personalized dashboard</p>
+            <a asp-controller="User" asp-action="Login" class="btn btn-light btn-lg px-5">
+                <i class="fas fa-sign-in-alt me-2"></i>Login Now
+            </a>
+        </div>
+    </div>
+</div>

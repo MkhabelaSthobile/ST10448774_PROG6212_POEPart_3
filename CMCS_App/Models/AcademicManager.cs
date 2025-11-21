@@ -17,7 +17,7 @@ namespace CMCS_App.Models
 
         [Required]
         [StringLength(255)]
-        public string Password { get; set; } = "Mgr@123!";
+        public string Password { get; set; }
 
         public void VerifyClaim(Claim claim)
         {
