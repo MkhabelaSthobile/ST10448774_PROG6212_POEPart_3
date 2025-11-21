@@ -70,15 +70,11 @@ VALUES
 
 
 INSERT INTO ProgrammeCoordinators (Name, Email, Password)
-VALUES	('David Johnson', 'david.johnson@university.ac.za', 'PCDavid@001!'),
-		('Lara-Jean Peckham', 'lisa.anderson@university.ac.za', 'PCLaraJean@002!'),
-		('Amy Schnitzel', 'amy.schnitzel@university.ac.za', 'PCAmy@003!');
+VALUES	('Lara-Jean Peckham', 'lara.peckham@university.ac.za', 'PCLaraJean@002!');
 
 
 INSERT INTO AcademicManagers (FullName, Email, Password)
-VALUES	('James Carbonara', 'james.carb@university.ac.za', 'JCAM@6633'),
-		('Prof. Sarah Martinez', 'sarah.martinezzz@university.ac.za', 'SMAM@1254'),
-		('Liam Payne', 'liam.payyyne@university.ac.za', 'LPAM@5821');
+VALUES	('Prof. Sarah Martinez', 'sarah.martinezzz@university.ac.za', 'SMAM@1254');
 
 
 INSERT INTO Claims (LecturerID, ModuleName, Month, HoursWorked, HourlyRate, TotalAmount, Status, SubmissionDate)
@@ -96,15 +92,15 @@ VALUES	('HR Admin 1', 'hr1@cmcs.ac.za', 'ADMIN001!', 'HR', NULL, NULL, NULL),
 		('HR Admin 2', 'hr2@cmcs.ac.za', 'ADMIN002!', 'HR', NULL, NULL, NULL);
 
 
--- Update rejection reason for rejected claim
-UPDATE Claims 
-SET RejectionReason = 'Hours exceed contract limit' 
-WHERE ClaimID = 4;
-
 
 SELECT * FROM Lecturers
 SELECT * FROM ProgrammeCoordinators
 SELECT * FROM AcademicManagers
 SELECT * FROM Claims
 SELECT * FROM Users
+
+DROP TABLE Claims
+DROP TABLE Users
+DROP TABLE ProgrammeCoordinators
+DROP TABLE AcademicManagers
 
